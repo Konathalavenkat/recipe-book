@@ -15,7 +15,7 @@ export function middleware(req: NextRequest) {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    const payload = jwt.verify(token, ENV.JWT_SECRET!);
     const {username, password} = payload as {username: string, password: string};
 
     // TODO: Replace this with DB lookup
@@ -30,5 +30,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/restricted/:path*'], // protect only API routes
+  matcher: ['/api/restricted/:path*','/admin/:path*'], // protect only API routes
 };

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   // Fake user check (replace with DB lookup)
   if (username === ENV.USERNAME && password === ENV.PASSWORD) {
-    const token = jwt.sign({ username: username, password:await hashPassword(password) }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ username: username, password:await hashPassword(password) }, ENV.JWT_SECRET, {
       expiresIn: '1h',
     });
 
