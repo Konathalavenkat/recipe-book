@@ -1,103 +1,74 @@
-import Image from "next/image";
+// src/app/page.tsx
+"use client";
+import React, { useEffect, useState } from "react";
+import type { Ingredient, RecipeIngredient } from "@/types";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [selected, setSelected] = useState<Ingredient[]>([]);
+  const [queryResults, setQueryResults] = useState<any[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  useEffect(() => {
+    fetch("/api/ingredients").then(r => r.json()).then(setIngredients);
+  }, []);
+
+  function addIngredient(i: Ingredient) {
+    if (selected.find(s => s.id === i.id)) return;
+    setSelected(s => [...s, i]);
+  }
+  function removeIngredient(id: number) {
+    setSelected(s => s.filter(x => x.id !== id));
+  }
+
+  async function search() {
+    const q = selected.map(s => s.id).join(",");
+    const res = await fetch(`/api/recipes?ingredient_ids=${q}`);
+    const json = await res.json();
+    setQueryResults(json);
+  }
+
+  return (
+    <main style={{ padding: 20 }}>
+      <h1>Recipe Finder</h1>
+
+      <div>
+        <label>Pick ingredient:</label>
+        <select onChange={e => {
+          const v = Number(e.target.value);
+          const ing = ingredients.find(x => x.id === v);
+          if (ing) addIngredient(ing);
+        }}>
+          <option value="">-- choose --</option>
+          {ingredients.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
+        </select>
+      </div>
+
+      <div style={{ marginTop: 8 }}>
+        {selected.map(s =>
+          <span key={s.id} style={{ display: "inline-block", padding: 6, border: "1px solid #ccc", borderRadius: 16, marginRight: 6 }}>
+            {s.name} <button onClick={() => removeIngredient(s.id)} style={{ marginLeft: 6 }}>x</button>
+          </span>
+        )}
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <button onClick={search}>Search recipes</button>
+      </div>
+
+      <section style={{ marginTop: 20 }}>
+        <h2>Results</h2>
+        {queryResults.map((r: any) => (
+          <div key={r.id} style={{ padding: 10, border: "1px solid #eee", marginBottom: 10 }}>
+            <h3>{r.title} ({r.match_count})</h3>
+            <img src={r.image_url} alt={r.title} style={{ maxWidth: 200 }} />
+            <ul>
+              {r.ingredients_with_names?.map((ing: any) => (
+                <li key={ing.id}>{ing.name} — {ing.qty} {ing.unit}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    </main>
   );
 }
