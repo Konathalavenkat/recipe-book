@@ -9,6 +9,6 @@ if (!connectionString) {
 export let pool = new Pool({ connectionString });
 
 export async function query<T = any>(text: string, params?: any[]) {
-  const res = await pool.query<T>(text, params);
+  const res = await pool.query(text, params);
   return res;
 }
