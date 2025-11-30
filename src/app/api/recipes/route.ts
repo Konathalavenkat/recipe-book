@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   if (wants.length === 0) {
     // simple list of recipes without filtering (limit)
     const res = await query(
-      `SELECT r.id, r.title, r.image_url,
+      `SELECT r.id, r.title, r.image_url, r.recipe,
         (
           SELECT jsonb_agg(
             jsonb_build_object(
@@ -58,6 +58,7 @@ SELECT
   r.id,
   r.title,
   r.image_url,
+  r.recipe,
   mc.match_count,
   (
     SELECT jsonb_agg(
