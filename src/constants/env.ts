@@ -4,8 +4,8 @@ export const ENV = {
   PORT: process.env.PORT ? Number(process.env.PORT) : 3000,
 
   // URLs
-  NEXT_PUBLIC_APP_URL: process.env.NODE_PUBLIC_APP_URL || 'http://localhost:3000',
-  NEXT_PUBLIC_API_URL: process.env.NODE_PUBLIC_API_URL || 'http://localhost:3000/api',
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
 
   // Auth
   JWT_SECRET: process.env.NODE_JWT_SECRET || 'change_me',
