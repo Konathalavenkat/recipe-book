@@ -1,4 +1,10 @@
 "use client"
 import { createContext } from "react";
+import { Recipe } from "@/types";
 
-export default createContext(null);
+export interface RecipeContextType {
+    recipe: Recipe | null;
+    isLoading: boolean;
+}
+
+export default createContext<RecipeContextType | null>(null);

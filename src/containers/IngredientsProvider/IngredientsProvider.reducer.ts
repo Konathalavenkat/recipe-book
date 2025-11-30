@@ -2,7 +2,7 @@ import { Item, State } from "@/types/Ingredients";
 
 type Action =
   | { type: 'ADD_ITEM'; payload: Item }
-  | { type: 'REMOVE_ITEM'; payload: { id: string }}
+  | { type: 'REMOVE_ITEM'; payload: { id: number }}
   | { type: 'ADD_ITEMS'; payload: Item[] }
   | { type: 'REMOVE_ALL_ITEMS' }
 ;

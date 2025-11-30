@@ -7,24 +7,16 @@ import Instructions from './components/Instructions';
 import BackButton from './components/BackButton';
 import Link from 'next/link';
 import RecipeSkeleton from './components/RecipeSkeleton';
-
-type Ingredient = {
-    id: number;
-    qty: number;
-    name: string;
-    unit: string | null;
-};
-
-type Recipe = {
-    id: string;
-    title: string;
-    image_url: string;
-    recipe: string;
-    ingredients: Ingredient[];
-};
+import { Recipe } from '@/types';
 
 const RecipePage: React.FC = () => {
-    const { recipe, isLoading } = useRecipe() as { recipe: Recipe | null, isLoading: boolean };
+    const recipeContext = useRecipe();
+
+    if (!recipeContext) {
+        return <RecipeSkeleton />;
+    }
+
+    const { recipe, isLoading } = recipeContext;
 
     if (isLoading) {
         return <RecipeSkeleton />;
@@ -49,7 +41,7 @@ const RecipePage: React.FC = () => {
                     <RecipeHeader imageUrl={recipe.image_url} title={recipe.title} />
                     <div className="grid grid-cols-1 gap-8 mt-8">
                         <IngredientsList ingredients={recipe.ingredients} />
-                        <Instructions instructions={recipe.recipe} />
+                        <Instructions instructions={recipe.recipe || ''} />
                     </div>
                 </div>
             </div>

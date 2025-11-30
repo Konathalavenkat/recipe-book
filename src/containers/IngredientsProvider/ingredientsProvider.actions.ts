@@ -5,7 +5,7 @@ export const addIngredient = (dispatch: Dispatch<any>, Item: Item) => {
     dispatch({ type: 'ADD_ITEM', payload: Item })
 }
 
-export const removeIngredient = (dispatch: Dispatch<any>, id: string) => {
+export const removeIngredient = (dispatch: Dispatch<any>, id: number) => {
     dispatch({ type: 'REMOVE_ITEM', payload: { id } });
 }
 

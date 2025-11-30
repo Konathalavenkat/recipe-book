@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 
 type RecipeHeaderProps = {
-    imageUrl: string;
+    imageUrl: string | null | undefined;
     title: string;
 };
 
@@ -12,7 +12,7 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ imageUrl, title }) => {
         <div className="mb-6">
             <div className="relative w-full h-96">
                 <Image
-                    src={imageUrl}
+                    src={imageUrl || 'https://via.placeholder.com/1200x800'}
                     alt={title}
                     layout="fill"
                     objectFit="cover"

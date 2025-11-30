@@ -7,7 +7,7 @@ export interface IngredientsContextType {
     items: Item[];
   };
   addIngredient: (ingredient: Item) => void;
-  removeIngredient: (id: string) => void;
+  removeIngredient: (id: number) => void;
   addIngredients: (ingredients: Item[]) => void;
   removeAllIngredients: () => void;
 }

@@ -8,14 +8,21 @@ import IngredientsAutocomplete from "@/components/organisms/IngredientsAutocompl
 import { fetchRecipeWithIngredients } from "@/services/api/recipe";
 import Card from "@/components/atoms/Card";
 import Link from "next/link";
+import { Recipe } from "@/types";
 import HomeSkeleton from "./components/HomeSkeleton";
 
 const Home = (props: any) => {
   const { children, ...rest } = props;
 
-  const { state, addIngredient, removeIngredient } = useIngredients();
-  const [queryResults, setQueryResults] = useState<any[]>([]);
+  const ingredientsContext = useIngredients();
+  const [queryResults, setQueryResults] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  if (!ingredientsContext) {
+    return <HomeSkeleton />;
+  }
+
+  const { state, addIngredient, removeIngredient } = ingredientsContext;
 
   useEffect(() => {
     search();
@@ -58,7 +65,7 @@ const Home = (props: any) => {
         <section style={{ margin: 20 }}>
           <Grid container spacing={4}>
             {queryResults.map((r: any) => (
-              <Grid key={r.id} item size={{ xs: 12, sm: 6, md: 4 , lg: 3}}>
+              <Grid key={r.id} size={{ xs: 12, sm: 6, md: 4 , lg: 3}}>
                 <Link href={`/recipe/${r.id}`}>
                   <Card
                     onClick={() => console.log(r)}

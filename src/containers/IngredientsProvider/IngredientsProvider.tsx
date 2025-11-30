@@ -16,7 +16,7 @@ const IngredientsProvider = ({ children }: IngredientsProviderProps) => {
     (): IngredientsContextType => ({
       state,
       addIngredient: (ingredient: Item) => addIngredient(dispatch, ingredient),
-      removeIngredient: (id: string) => removeIngredient(dispatch, id),
+      removeIngredient: (id: number) => removeIngredient(dispatch, id),
       addIngredients: (ingredients: Item[]) => addIngredients(dispatch, ingredients),
       removeAllIngredients: () => removeAllIngredients(dispatch)
     }),

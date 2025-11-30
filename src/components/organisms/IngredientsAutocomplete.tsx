@@ -74,7 +74,7 @@ const IngredientsAutocomplete = ({
           <Chip
             key={ingredient.id}
             label={ingredient.name}
-            variant="contained"
+            variant="filled"
             color="success"
             onDelete={() => onRemove(ingredient.id)}
             sx={

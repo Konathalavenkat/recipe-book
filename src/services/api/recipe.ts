@@ -1,6 +1,8 @@
 import ApiService, { SERVICE_TYPE } from '@/services/http'
 import { Item } from '@/types/Ingredients';
-export const fetchRecipeWithIngredients = async (ingredients: Item[]) => {
+import { Recipe } from '@/types';
+
+export const fetchRecipeWithIngredients = async (ingredients: Item[]): Promise<Recipe[]> => {
     try{
         console.log(ingredients, 'ingredients')
         const response = await ApiService.get(
@@ -12,7 +14,7 @@ export const fetchRecipeWithIngredients = async (ingredients: Item[]) => {
                 }
             }
         );
-        return response;
+        return response as Recipe[];
     }
     catch(e){
         console.log(e);

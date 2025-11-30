@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
           )
           FROM jsonb_array_elements(r.ingredients) elem
           JOIN ingredients ing ON ing.id = (elem->>'id')::int
-        ) AS ingredients_with_names
+        ) AS ingredients
        FROM recipes r
        ORDER BY lower(r.title)
        LIMIT 100`
@@ -71,7 +71,7 @@ SELECT
     )
     FROM jsonb_array_elements(r.ingredients) elem
     JOIN ingredients ing ON ing.id = (elem->>'id')::int
-  ) AS ingredients_with_names
+  ) AS ingredients
 FROM recipes r
 JOIN LATERAL (
   SELECT count(*) AS match_count

@@ -15,9 +15,10 @@ export type RecipeIngredient = {
 export type Recipe = {
   id?: string;
   title: string;
-  ingredients: RecipeIngredient[]; // denormalized objects
+  ingredients: RecipeIngredient[]; 
   image_url?: string | null;
   created_by?: string | null;
   created_at?: string;
   recipe?: string;
+  match_count?: number;
 };
